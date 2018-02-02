@@ -7,9 +7,12 @@
 
 <script>
   // require sources
-  import _Quill from 'quill'
+  import { ImageExtend } from './lib/ImageExtend'
+  import ImageResize from './lib/ImageResize'
   import defaultOptions from './options'
-  const Quill = window.Quill || _Quill
+
+  Quill.register('modules/ImageExtend', ImageExtend)
+  Quill.register('modules/ImageResize', ImageResize)
 
   // pollfill
   if (typeof Object.assign != 'function') {
@@ -108,6 +111,36 @@
             this.$emit('input', this._content)
             this.$emit('change', { html, text, quill })
           })
+
+          // 处理编辑器事件
+          this.$refs.editor.onbeforecopy = function(e) {
+            e = e || window.event;
+            e.stopPropagation();
+            return true;
+          };
+          // this.$refs.editor.onselect = this.$refs.editor.onmouseup = function(e) {
+          //   e = e || window.event;
+          //   e.stopPropagation();
+          // };
+          this.$refs.editor.onselect = function(e) {
+            e = e || window.event;
+            e.stopPropagation();
+          };
+          this.$refs.editor.onselectstart = function(e) {
+            e = e || window.event;
+            e.stopPropagation();
+            e.returnValue = true;
+          }
+          this.$refs.editor.oncopy = function(e) {
+            e = e || window.event;
+            e.stopPropagation();
+            e.returnValue = true;
+          }
+          // this.$refs.editor.onkeydown = function(e) {
+          //   e = e || window.event;
+          //   e.stopPropagation();
+          //   e.returnValue = e.keyCode != 13;
+          // }
 
           // Emit ready event
           this.$emit('ready', this.quill)

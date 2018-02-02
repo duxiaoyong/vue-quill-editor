@@ -11,15 +11,15 @@ const env = process.env.NODE_ENV === 'testing'
 module.exports = {
   module: {
     rules: [
-      {
-        test: /\.(js|vue)$/,
-        loader: 'eslint-loader',
-        enforce: 'pre',
-        include: [resolve('src'), resolve('test')],
-        options: {
-          formatter: require('eslint-friendly-formatter')
-        }
-      },
+      // {
+      //   test: /\.(js|vue)$/,
+      //   loader: 'eslint-loader',
+      //   enforce: 'pre',
+      //   include: [resolve('src'), resolve('test')],
+      //   options: {
+      //     formatter: require('eslint-friendly-formatter')
+      //   }
+      // },
       {
         test: /\.vue$/,
         loader: 'vue-loader',
@@ -35,6 +35,10 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': env
+    }),
+    new webpack.ProvidePlugin({
+      'Quill': "quill",
+      'window.Quill': "quill"
     }),
     new webpack.optimize.UglifyJsPlugin({
       compress: { warnings: false }
