@@ -11,6 +11,15 @@
   import ImageResize from './lib/ImageResize'
   import defaultOptions from './options'
 
+  // 插入html
+  Quill.prototype.insertHTML = function(html) {
+    // setTimeout放到下一次事件循环中处理
+    // 参见clipboard.onPaste
+    setTimeout(() => {
+      let index = (this.getSelection(true) || {}).index || this.getLength();
+      this.clipboard.dangerouslyPasteHTML(index, html);
+    }, 0);
+  }
   Quill.register('modules/ImageExtend', ImageExtend)
   Quill.register('modules/ImageResize', ImageResize)
 
